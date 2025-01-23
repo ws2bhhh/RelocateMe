@@ -36,7 +36,7 @@ jobs:
         #   # Workspace path
         #   workspace-path: # optional, default is 
         #   # Choose app-store, ad-hoc, package, enterprise, development, or developer-id
-          export-method: ad-hoc # optional, default is app-store
+          export-method: package # optional, default is app-store
         #   # For example, Debug, Release
         #   configuration: # optional, default is Release
         #   # Output path of ipa
