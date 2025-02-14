@@ -101,9 +101,20 @@ class MapViewController: UIViewController {
             return
         }
 
+        // fix
+        let defaultLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        // let sourcePlacemark = startingLocation ?? MKPlacemark(coordinate: defaultLocation)
+        // let destinationPlacemark = endingLocation ?? MKPlacemark(coordinate: defaultLocation)
+
+
         let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: startingLocation ?? MKPlacemark())
-        request.destination = MKMapItem(placemark: endingLocation ?? MKPlacemark())
+        // request.source = MKMapItem(placemark: startingLocation ?? MKPlacemark()) // mark
+        // request.destination = MKMapItem(placemark: endingLocation ?? MKPlacemark())  // mark
+
+        // fix
+        request.source = MKMapItem(placemark: startingLocation ?? MKPlacemark(coordinate: defaultLocation))
+        request.destination = MKMapItem(placemark: endingLocation ?? MKPlacemark(coordinate: defaultLocation))
+
         request.transportType = .any
         
         //loadingView.startAnimating()
@@ -111,7 +122,12 @@ class MapViewController: UIViewController {
         directions.calculate { response, _ in
             guard let route = response?.routes.first else { return }
             self.route = route
-            self.mapView.addAnnotations([self.startingLocation ?? MKPlacemark(), self.endingLocation ?? MKPlacemark()])
+
+            // self.mapView.addAnnotations([self.startingLocation ?? MKPlacemark(), self.endingLocation ?? MKPlacemark()])// mark
+
+            // fix
+            self.mapView.addAnnotations([self.startingLocation ?? MKPlacemark(coordinate: defaultLocation), self.endingLocation ?? MKPlacemark(coordinate: defaultLocation)])
+
             self.mapView.addOverlay(route.polyline)
             self.mapView.setVisibleMapRect(
                 route.polyline.boundingMapRect,
@@ -119,7 +135,7 @@ class MapViewController: UIViewController {
                 animated: true)
             //self.loadingView.stopAnimating()
         }
-    }
+     }
     
     
 
