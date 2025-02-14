@@ -5,5 +5,15 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v4
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+    # - name: Setup tmate session
+    #   uses: mxschmitt/action-tmate@v3
+    - run: xcodebuild clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphoneos -destination generic/platform=iOS
+    - run: |
+        mkdir -p /Users/runner/work/RelocateMe/RelocateMe/build/Release-iphoneos/Payload
+        mv /Users/runner/work/RelocateMe/RelocateMe/build/Release-iphoneos/RelocateMe.app /Users/runner/work/RelocateMe/RelocateMe/build/Release-iphoneos/Payload
+        cd /Users/runner/work/RelocateMe/RelocateMe/build/Release-iphoneos/
+        zip -r app-ios.ipa Payload
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-ios.ipa
+        path: /Users/runner/work/RelocateMe/RelocateMe/build/Release-iphoneos/app-ios.ipa
